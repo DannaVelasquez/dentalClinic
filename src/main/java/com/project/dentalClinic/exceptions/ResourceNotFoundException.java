@@ -1,4 +1,4 @@
-package com.project.dentalClinic.Exceptions;
+package com.project.dentalClinic.exceptions;
 
 public class ResourceNotFoundException extends Exception{
 

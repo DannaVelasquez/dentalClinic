@@ -1,12 +1,9 @@
 package com.project.dentalClinic.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
 
 @Setter
 @Getter
@@ -24,8 +21,8 @@ public class Dentist {
     @Column
     private String register;
 
-    @OneToMany(mappedBy = "dentist", fetch = FetchType.LAZY)
-    private List<Turn> turns;
+//    @OneToMany(mappedBy = "dentist", fetch = FetchType.LAZY)
+//    private List<Turn> turns;
 
     @Override
     public String toString(){

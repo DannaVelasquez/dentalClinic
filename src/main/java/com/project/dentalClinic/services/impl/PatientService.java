@@ -1,9 +1,8 @@
 package com.project.dentalClinic.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.dentalClinic.Exceptions.BadRequestException;
-import com.project.dentalClinic.Exceptions.ResourceNotFoundException;
-import com.project.dentalClinic.dto.AddressDto;
+import com.project.dentalClinic.exceptions.BadRequestException;
+import com.project.dentalClinic.exceptions.ResourceNotFoundException;
 import com.project.dentalClinic.dto.PatientDto;
 import com.project.dentalClinic.entities.Address;
 import com.project.dentalClinic.entities.Patient;

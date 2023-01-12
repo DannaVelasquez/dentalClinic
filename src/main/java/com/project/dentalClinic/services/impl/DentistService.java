@@ -1,8 +1,8 @@
 package com.project.dentalClinic.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.dentalClinic.Exceptions.BadRequestException;
-import com.project.dentalClinic.Exceptions.ResourceNotFoundException;
+import com.project.dentalClinic.exceptions.BadRequestException;
+import com.project.dentalClinic.exceptions.ResourceNotFoundException;
 import com.project.dentalClinic.dto.DentistDto;
 import com.project.dentalClinic.repository.DentistRepository;
 import com.project.dentalClinic.entities.Dentist;
@@ -25,13 +25,14 @@ public class DentistService implements IDentistService {
         this.dentistRepository = dentistRepository;
     }
 
+
     //Method to create a dentist
     @Override
     public DentistDto saveDentist(DentistDto dentistDto) throws BadRequestException {
         LOG.debug("Registering new dentist: " + dentistDto.toString());
         Dentist dentist = objectMapper.convertValue(dentistDto, Dentist.class);
         Dentist savedDentist = dentistRepository.save(dentist);
-        if (savedDentist.equals(null)) {
+        if (savedDentist == (null)) {
             LOG.error("Dentist couldn't be saved!");
             throw new BadRequestException("Dentist couldn't be saved!");
         }

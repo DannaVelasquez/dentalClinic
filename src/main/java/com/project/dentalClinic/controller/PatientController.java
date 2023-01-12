@@ -1,19 +1,14 @@
 package com.project.dentalClinic.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.dentalClinic.Exceptions.BadRequestException;
-import com.project.dentalClinic.Exceptions.ResourceNotFoundException;
+import com.project.dentalClinic.exceptions.BadRequestException;
+import com.project.dentalClinic.exceptions.ResourceNotFoundException;
 import com.project.dentalClinic.dto.PatientDto;
-import com.project.dentalClinic.entities.Patient;
 import com.project.dentalClinic.services.impl.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 @RestController
 @RequestMapping("/patients")
 public class PatientController {

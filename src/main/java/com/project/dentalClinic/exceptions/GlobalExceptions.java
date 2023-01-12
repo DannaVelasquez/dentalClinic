@@ -1,4 +1,4 @@
-package com.project.dentalClinic.Exceptions;
+package com.project.dentalClinic.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

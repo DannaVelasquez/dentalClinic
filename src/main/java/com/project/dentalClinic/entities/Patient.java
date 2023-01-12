@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-
 @Setter
 @Getter
 @NoArgsConstructor
@@ -29,8 +28,8 @@ public class Patient {
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
-    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
-    private List<Turn> turns;
+//    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
+//    private List<Turn> turns;
 
     @Override
     public String toString(){

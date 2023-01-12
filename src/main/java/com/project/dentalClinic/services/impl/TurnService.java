@@ -1,8 +1,8 @@
 package com.project.dentalClinic.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.dentalClinic.Exceptions.BadRequestException;
-import com.project.dentalClinic.Exceptions.ResourceNotFoundException;
+import com.project.dentalClinic.exceptions.BadRequestException;
+import com.project.dentalClinic.exceptions.ResourceNotFoundException;
 import com.project.dentalClinic.dto.TurnDto;
 import com.project.dentalClinic.entities.Dentist;
 import com.project.dentalClinic.entities.Patient;
@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TurnService implements ITurnService {
@@ -37,74 +38,44 @@ public class TurnService implements ITurnService {
     @Override
     public TurnDto saveTurn (TurnDto turnDto) throws BadRequestException {
         LOG.debug("Creating a turn...");
-        Dentist dentist1 = objectMapper.convertValue(turnDto.getDentist().getId(), Dentist.class);
         Optional<Dentist> dentist = dentistRepository.findById(turnDto.getDentist().getId());
-        Patient patient1 = objectMapper.convertValue(turnDto.getPatient().getId(), Patient.class);
         Optional<Patient> patient = patientRepository.findById(turnDto.getPatient().getId());
-        Turn savedTurn;
-        if (patient.isEmpty() || dentist.isEmpty()) {
-            LOG.error("Patient or Dentist don't exist!");
-            throw new BadRequestException("Patient or Dentist don't exist!");
-        }
-            turnDto.setDentist(dentist.get());
-            turnDto.setPatient(patient.get());
-            turnDto.setDate(new Date());
-            LOG.info("Turn saved successfully!");
-            Turn turn1 = objectMapper.convertValue(turnDto, Turn.class);
-            savedTurn = turnRepository.save(turn1);
-        return objectMapper.convertValue(savedTurn, TurnDto.class);
+        Turn turn = mapToEntity(turnDto);
+        turn.setPatient(patient.get());
+        turn.setDentist(dentist.get());
+        turn.setDate(new Date());
+        Turn savedTurn = turnRepository.save(turn);
+        return objectMapper.convertValue(turn, TurnDto.class);
     }
 
-    //Method to search turns by Id
     @Override
-    public Optional<TurnDto> searchTurn(Integer id) throws ResourceNotFoundException{
-        LOG.debug("Searching turn...");
-        Optional<Turn> turnOptional = turnRepository.findById(id);
-        Turn turn = turnOptional.orElse(null);
-        if(turnRepository.findById(id).isEmpty()){
-            LOG.error("Turn with id: " + id + " doesn't exist!");
-            throw new ResourceNotFoundException("Turn with id: " + id + " doesn't exist!");
-        }
-        LOG.info("Turn was found!");
-        Turn searchedTurn = turnRepository.findById(id).get();
-        return Optional.ofNullable(objectMapper.convertValue(searchedTurn, TurnDto.class));
+    public void deleteTurn(TurnDto turnDto) {
+        turnRepository.delete(mapToEntity(turnDto));
     }
 
-    //Method to search all turns
     @Override
     public List<TurnDto> listAll() {
-        LOG.debug("Listing all turns...");
-        List<Turn> turnList = turnRepository.findAll();
-        List<TurnDto> turnDtoList = new ArrayList<>();
-        TurnDto turnDto;
-        for(Turn turn : turnList){
-            turnDto = objectMapper.convertValue(turn, TurnDto.class);
-            turnDtoList.add(turnDto);
-        }
-        LOG.info("Turns listed!");
-        return turnDtoList;
+        return turnRepository.findAll().stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
-    //Method to update a turn
-    public TurnDto updateTurn(TurnDto turnDto) throws BadRequestException {
-        LOG.debug("Updating turn...");
-        LOG.info("Dentist updated!");
-        return saveTurn(turnDto);
-    }
-
-    //Method to delete a turn
     @Override
-    public void deleteTurn(Integer id) throws ResourceNotFoundException {
-        LOG.debug("Deleting turn...");
-        if(Objects.isNull(searchTurn(id))) {
-            LOG.error("Turn with id: " + id + "doesn't exist!");
-            throw new ResourceNotFoundException("Turn with id: " + id + "doesn't exist!");
-        }
-        LOG.info("Turn was deleted!");
-        turnRepository.deleteById(id);
+    public List<TurnDto> getAllByDentistRegister(String register) {
+        return turnRepository.findAllByDentistRegister(register).stream().map(this::mapToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TurnDto> getAllByPatientDni(String dni) {
+        return turnRepository.findAllByPatientDni(dni).stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
 
+    private Turn mapToEntity(TurnDto turnDto) {
+        return objectMapper.convertValue(turnDto, Turn.class);
+    }
+
+    private TurnDto mapToDto(Turn turn) {
+        return objectMapper.convertValue(turn, TurnDto.class);
+    }
 
 
 }

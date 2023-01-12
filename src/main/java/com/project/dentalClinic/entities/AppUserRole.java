@@ -1,4 +1,5 @@
 package com.project.dentalClinic.entities;
 
-public class AppUserRole {
+public enum AppUserRole {
+    USER, ADMIN
 }

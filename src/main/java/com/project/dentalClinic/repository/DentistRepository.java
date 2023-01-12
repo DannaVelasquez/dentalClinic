@@ -11,4 +11,7 @@ public interface DentistRepository extends JpaRepository<Dentist,Integer> {
     //HQL Implementation
 //    @Query("SELECT d FROM Dentist d WHERE d.name = ?1")
 //    Dentist searchDentistByName(String dentistName);
+
+    @Query("SELECT d FROM Dentist d WHERE d.register =?1")
+    Dentist findByRegister(String register);
 }

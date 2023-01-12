@@ -1,7 +1,7 @@
 package com.project.dentalClinic.services;
 
-import com.project.dentalClinic.Exceptions.BadRequestException;
-import com.project.dentalClinic.Exceptions.ResourceNotFoundException;
+import com.project.dentalClinic.exceptions.BadRequestException;
+import com.project.dentalClinic.exceptions.ResourceNotFoundException;
 import com.project.dentalClinic.dto.PatientDto;
 import java.util.List;
 import java.util.Optional;

@@ -1,7 +1,7 @@
 package com.project.dentalClinic.controller;
 
-import com.project.dentalClinic.Exceptions.BadRequestException;
-import com.project.dentalClinic.Exceptions.ResourceNotFoundException;
+import com.project.dentalClinic.exceptions.BadRequestException;
+import com.project.dentalClinic.exceptions.ResourceNotFoundException;
 import com.project.dentalClinic.dto.TurnDto;
 import com.project.dentalClinic.services.impl.DentistService;
 import com.project.dentalClinic.services.impl.PatientService;
@@ -26,56 +26,69 @@ public class TurnController {
         this.patientService = patientService;
     }
 
-    @PostMapping("/new")
-    public ResponseEntity<TurnDto> saveTurn(@RequestBody TurnDto turnDto)
-            throws BadRequestException, ResourceNotFoundException {
-        ResponseEntity<TurnDto> response;
-        if (patientService.searchPatient(turnDto.getPatient().getId()) != null &&
-                dentistService.searchDentist(turnDto.getDentist().getId()) != null) {
-            response = ResponseEntity.ok(turnService.saveTurn(turnDto));
-        } else {
-            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        return response;
+    @PostMapping
+    public ResponseEntity<TurnDto> createTurn(@RequestBody TurnDto turnDto) throws BadRequestException {
+        TurnDto savedTurn = turnService.saveTurn(turnDto);
+        return ResponseEntity.ok().body(savedTurn);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TurnDto> searchPatient(@PathVariable Integer id) throws ResourceNotFoundException {
-        ResponseEntity<TurnDto> response = null;
-        if(turnService.searchTurn(id).isPresent()){
-            TurnDto turnDto = turnService.searchTurn(id).orElse(null);
-            response = ResponseEntity.ok().body(turnDto);
-        }else{
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return response;
+    @GetMapping("/search")
+    public ResponseEntity<List<TurnDto>> getAllAppointments() {
+        List<TurnDto> turnDtos = turnService.listAll();
+        return ResponseEntity.ok().body(turnDtos);
     }
 
-    @GetMapping
-    public ResponseEntity<List<TurnDto>> listAll() throws ResourceNotFoundException {
-        return ResponseEntity.ok(turnService.listAll());
-    }
-
-    @PutMapping("/update")
-    public ResponseEntity<TurnDto> updateTurn(@RequestBody TurnDto turnDto) throws BadRequestException, ResourceNotFoundException {
-        ResponseEntity<TurnDto> response = null;
-        if(turnDto.getId() != null && turnService.searchTurn(turnDto.getId()).isPresent()){
-            response = ResponseEntity.ok(turnService.updateTurn(turnDto));
-        }else{
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return response;
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTurn(@PathVariable Integer id) throws ResourceNotFoundException {
-        ResponseEntity<String> response;
-        if (turnService.searchTurn(id) != null) {
-            turnService.deleteTurn(id);
-            response = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } else {
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return response;
-    }
+//    @PostMapping("/new")
+//    public ResponseEntity<TurnDto> saveTurn(@RequestBody TurnDto turnDto)
+//            throws BadRequestException, ResourceNotFoundException {
+//        ResponseEntity<TurnDto> response;
+//        if (patientService.searchPatient(turnDto.getPatient().getId()).isPresent() &&
+//                dentistService.searchDentist(turnDto.getDentist().getId()).isPresent()) {
+//            turnService.saveTurn(turnDto);
+//            response = ResponseEntity.ok(turnService.saveTurn(turnDto));
+//        } else {
+//            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//        return response;
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<TurnDto> searchPatient(@PathVariable Integer id) throws ResourceNotFoundException {
+//        ResponseEntity<TurnDto> response = null;
+//        if(turnService.searchTurn(id).isPresent()){
+//            TurnDto turnDto = turnService.searchTurn(id).orElse(null);
+//            response = ResponseEntity.ok().body(turnDto);
+//        }else{
+//            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+//        return response;
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<List<TurnDto>> listAll() throws ResourceNotFoundException {
+//        return ResponseEntity.ok(turnService.listAll());
+//    }
+//
+//    @PutMapping("/update")
+//    public ResponseEntity<TurnDto> updateTurn(@RequestBody TurnDto turnDto) throws BadRequestException, ResourceNotFoundException {
+//        ResponseEntity<TurnDto> response = null;
+//        if(turnDto.getId() != null && turnService.searchTurn(turnDto.getId()).isPresent()){
+//            response = ResponseEntity.ok(turnService.updateTurn(turnDto));
+//        }else{
+//            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+//        return response;
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<String> deleteTurn(@PathVariable Integer id) throws ResourceNotFoundException {
+//        ResponseEntity<String> response;
+//        if (turnService.searchTurn(id) != null) {
+//            turnService.deleteTurn(id);
+//            response = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//        } else {
+//            response = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+//        return response;
+//    }
 }

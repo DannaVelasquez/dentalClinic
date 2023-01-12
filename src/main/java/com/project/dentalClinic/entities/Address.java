@@ -1,7 +1,6 @@
 package com.project.dentalClinic.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +25,7 @@ public class Address {
     @OneToOne(mappedBy = "address")
     @JsonIgnore
     private Patient patient;
+
 
     @Override
     public String toString() {

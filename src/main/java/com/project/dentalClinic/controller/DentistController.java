@@ -1,7 +1,7 @@
 package com.project.dentalClinic.controller;
 
-import com.project.dentalClinic.Exceptions.BadRequestException;
-import com.project.dentalClinic.Exceptions.ResourceNotFoundException;
+import com.project.dentalClinic.exceptions.BadRequestException;
+import com.project.dentalClinic.exceptions.ResourceNotFoundException;
 import com.project.dentalClinic.dto.DentistDto;
 import com.project.dentalClinic.services.impl.DentistService;
 import org.apache.log4j.Logger;
@@ -70,7 +70,7 @@ public class DentistController {
         return response;
     }
 
-    ///Method implemented with HQL
+    //Method implemented with HQL
 //    @GetMapping("/{dentistName}")
 //    public ResponseEntity<List<DentistDto>> searchDentistByName(@PathVariable String dentistName){
 //        return ResponseEntity.ok(dentistService.searchDentistByName(dentistName));
